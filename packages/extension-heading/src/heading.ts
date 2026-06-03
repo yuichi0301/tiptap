@@ -132,7 +132,7 @@ export const Heading = Node.create<HeadingOptions>({
     return this.options.levels.reduce(
       (items, level) => ({
         ...items,
-        [`Mod-Alt-${level}`]: () => this.editor.commands.toggleHeading({ level }),
+        [`Mod-Alt-${level}`]: () => this.editor.commands?.toggleHeading({ level }) ?? false,
       }),
       {},
     )

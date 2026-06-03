@@ -124,7 +124,7 @@ export const Emoji = Node.create<EmojiOptions, EmojiStorage>({
 
           editor
             .chain()
-            .focus()
+            ?.focus()
             .insertContentAt(range, [
               {
                 type: this.name,
@@ -395,7 +395,7 @@ export const Emoji = Node.create<EmojiOptions, EmojiStorage>({
             const from = pos
             const to = from + node.nodeSize
 
-            this.editor.commands.setTextSelection({
+            this.editor.commands?.setTextSelection({
               from,
               to,
             })

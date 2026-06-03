@@ -323,7 +323,7 @@ export const Mention = Node.create<MentionOptions>({
   addKeyboardShortcuts() {
     return {
       Backspace: () =>
-        this.editor.commands.command(({ tr, state }) => {
+        this.editor.commands?.command(({ tr, state }) => {
           let isMention = false
           const { selection } = state
           const { empty, anchor } = selection
@@ -356,7 +356,7 @@ export const Mention = Node.create<MentionOptions>({
           }
 
           return isMention
-        }),
+        }) ?? false,
     }
   },
 

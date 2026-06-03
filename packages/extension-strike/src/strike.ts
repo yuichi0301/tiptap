@@ -110,7 +110,7 @@ export const Strike = Mark.create<StrikeOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-Shift-s': () => this.editor.commands.toggleStrike(),
+      'Mod-Shift-s': () => this.editor.commands?.toggleStrike() ?? false,
     }
   },
 

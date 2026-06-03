@@ -74,13 +74,13 @@ export const UndoRedo = Extension.create<UndoRedoOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-z': () => this.editor.commands.undo(),
-      'Shift-Mod-z': () => this.editor.commands.redo(),
-      'Mod-y': () => this.editor.commands.redo(),
+      'Mod-z': () => this.editor.commands?.undo() ?? false,
+      'Shift-Mod-z': () => this.editor.commands?.redo() ?? false,
+      'Mod-y': () => this.editor.commands?.redo() ?? false,
 
       // Russian keyboard layouts
-      'Mod-я': () => this.editor.commands.undo(),
-      'Shift-Mod-я': () => this.editor.commands.redo(),
+      'Mod-я': () => this.editor.commands?.undo() ?? false,
+      'Shift-Mod-я': () => this.editor.commands?.redo() ?? false,
     }
   },
 })

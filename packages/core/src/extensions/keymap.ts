@@ -12,7 +12,7 @@ export const Keymap = Extension.create({
 
   addKeyboardShortcuts() {
     const handleBackspace = () =>
-      this.editor.commands.first(({ commands }) => [
+      this.editor.commands?.first(({ commands }) => [
         () => commands.undoInputRule(),
 
         // maybe convert first text block node to default node
@@ -48,33 +48,33 @@ export const Keymap = Extension.create({
         () => commands.deleteSelection(),
         () => commands.joinBackward(),
         () => commands.selectNodeBackward(),
-      ])
+      ]) ?? false
 
     const handleDelete = () =>
-      this.editor.commands.first(({ commands }) => [
+      this.editor.commands?.first(({ commands }) => [
         () => commands.deleteSelection(),
         () => commands.deleteCurrentNode(),
         () => commands.joinForward(),
         () => commands.selectNodeForward(),
-      ])
+      ]) ?? false
 
     const handleEnter = () =>
-      this.editor.commands.first(({ commands }) => [
+      this.editor.commands?.first(({ commands }) => [
         () => commands.newlineInCode(),
         () => commands.createParagraphNear(),
         () => commands.liftEmptyBlock(),
         () => commands.splitBlock(),
-      ])
+      ]) ?? false
 
     const baseKeymap = {
       Enter: handleEnter,
-      'Mod-Enter': () => this.editor.commands.exitCode(),
+      'Mod-Enter': () => this.editor.commands?.exitCode() ?? false,
       Backspace: handleBackspace,
       'Mod-Backspace': handleBackspace,
       'Shift-Backspace': handleBackspace,
       Delete: handleDelete,
       'Mod-Delete': handleDelete,
-      'Mod-a': () => this.editor.commands.selectAll(),
+      'Mod-a': () => this.editor.commands?.selectAll() ?? false,
     }
 
     const pcKeymap = {
@@ -89,8 +89,8 @@ export const Keymap = Extension.create({
       'Ctrl-Alt-Backspace': handleDelete,
       'Alt-Delete': handleDelete,
       'Alt-d': handleDelete,
-      'Ctrl-a': () => this.editor.commands.selectTextblockStart(),
-      'Ctrl-e': () => this.editor.commands.selectTextblockEnd(),
+      'Ctrl-a': () => this.editor.commands?.selectTextblockStart() ?? false,
+      'Ctrl-e': () => this.editor.commands?.selectTextblockEnd() ?? false,
     }
 
     if (isiOS() || isMacOS()) {

@@ -91,7 +91,7 @@ export const Subscript = Mark.create<SubscriptExtensionOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-,': () => this.editor.commands.toggleSubscript(),
+      'Mod-,': () => this.editor.commands?.toggleSubscript() ?? false,
     }
   },
 })

@@ -113,8 +113,8 @@ export const HardBreak = Node.create<HardBreakOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-Enter': () => this.editor.commands.setHardBreak(),
-      'Shift-Enter': () => this.editor.commands.setHardBreak(),
+      'Mod-Enter': () => this.editor.commands?.setHardBreak() ?? false,
+      'Shift-Enter': () => this.editor.commands?.setHardBreak() ?? false,
     }
   },
 })

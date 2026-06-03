@@ -159,7 +159,7 @@ export const Highlight = Mark.create<HighlightOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-Shift-h': () => this.editor.commands.toggleHighlight(),
+      'Mod-Shift-h': () => this.editor.commands?.toggleHighlight() ?? false,
     }
   },
 

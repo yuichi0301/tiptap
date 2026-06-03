@@ -91,7 +91,7 @@ export const Superscript = Mark.create<SuperscriptExtensionOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-.': () => this.editor.commands.toggleSuperscript(),
+      'Mod-.': () => this.editor.commands?.toggleSuperscript() ?? false,
     }
   },
 })

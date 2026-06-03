@@ -133,7 +133,7 @@ export const Paragraph = Node.create<ParagraphOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-Alt-0': () => this.editor.commands.setParagraph(),
+      'Mod-Alt-0': () => this.editor.commands?.setParagraph() ?? false,
     }
   },
 })

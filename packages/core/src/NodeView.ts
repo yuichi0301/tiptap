@@ -322,7 +322,7 @@ export class NodeView<
    * Update the attributes of the prosemirror node.
    */
   updateAttributes(attributes: Record<string, any>): void {
-    this.editor.commands.command(({ tr }) => {
+    this.editor.commands?.command(({ tr }) => {
       const pos = this.getPos()
 
       if (typeof pos !== 'number') {
@@ -349,6 +349,6 @@ export class NodeView<
     }
     const to = from + this.node.nodeSize
 
-    this.editor.commands.deleteRange({ from, to })
+    this.editor.commands?.deleteRange({ from, to })
   }
 }

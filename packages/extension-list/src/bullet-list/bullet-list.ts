@@ -124,7 +124,7 @@ export const BulletList = Node.create<BulletListOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-Shift-8': () => this.editor.commands.toggleBulletList(),
+      'Mod-Shift-8': () => this.editor.commands?.toggleBulletList() ?? false,
     }
   },
 

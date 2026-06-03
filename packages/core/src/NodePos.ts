@@ -61,7 +61,7 @@ export class NodePos {
       to = this.to - 1
     }
 
-    this.editor.commands.insertContentAt({ from, to }, content)
+    this.editor.commands?.insertContentAt({ from, to }, content)
   }
 
   get attributes(): { [key: string]: any } {

@@ -6,7 +6,7 @@ import { hasListBefore } from './hasListBefore.js'
 
 export const handleBackspace = (editor: Editor, name: string, parentListTypes: string[]) => {
   // this is required to still handle the undo handling
-  if (editor.commands.undoInputRule()) {
+  if (editor.commands?.undoInputRule()) {
     return true
   }
 
@@ -40,11 +40,13 @@ export const handleBackspace = (editor: Editor, name: string, parentListTypes: s
 
     const $lastItemPos = editor.state.doc.resolve($listPos.start() + lastItem.pos + 1)
 
-    return editor
-      .chain()
-      .cut({ from: $anchor.start() - 1, to: $anchor.end() + 1 }, $lastItemPos.end())
-      .joinForward()
-      .run()
+    return (
+      editor
+        .chain()
+        ?.cut({ from: $anchor.start() - 1, to: $anchor.end() + 1 }, $lastItemPos.end())
+        .joinForward()
+        .run() ?? false
+    )
   }
 
   // if the cursor is not inside the current node type
@@ -62,5 +64,5 @@ export const handleBackspace = (editor: Editor, name: string, parentListTypes: s
   // At the start of a list item, lift it out. Top-level items split the
   // wrapping list around them; nested items get promoted into the outer
   // list. A second backspace then falls through to the merge branch above.
-  return editor.chain().liftListItem(name).run()
+  return editor.chain()?.liftListItem(name).run() ?? false
 }

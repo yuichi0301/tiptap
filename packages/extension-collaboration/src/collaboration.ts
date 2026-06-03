@@ -164,9 +164,9 @@ export const Collaboration = Extension.create<CollaborationOptions, Collaboratio
 
   addKeyboardShortcuts() {
     return {
-      'Mod-z': () => this.editor.commands.undo(),
-      'Mod-y': () => this.editor.commands.redo(),
-      'Shift-Mod-z': () => this.editor.commands.redo(),
+      'Mod-z': () => this.editor.commands?.undo() ?? false,
+      'Mod-y': () => this.editor.commands?.redo() ?? false,
+      'Shift-Mod-z': () => this.editor.commands?.redo() ?? false,
     }
   },
 

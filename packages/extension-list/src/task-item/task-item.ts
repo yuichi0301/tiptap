@@ -172,8 +172,8 @@ export const TaskItem = Node.create<TaskItemOptions>({
     const shortcuts: {
       [key: string]: KeyboardShortcutCommand
     } = {
-      Enter: () => this.editor.commands.splitListItem(this.name),
-      'Shift-Tab': () => this.editor.commands.liftListItem(this.name),
+      Enter: () => this.editor.commands?.splitListItem(this.name) ?? false,
+      'Shift-Tab': () => this.editor.commands?.liftListItem(this.name) ?? false,
     }
 
     if (!this.options.nested) {
@@ -182,7 +182,7 @@ export const TaskItem = Node.create<TaskItemOptions>({
 
     return {
       ...shortcuts,
-      Tab: () => this.editor.commands.sinkListItem(this.name),
+      Tab: () => this.editor.commands?.sinkListItem(this.name) ?? false,
     }
   },
 
@@ -219,7 +219,7 @@ export const TaskItem = Node.create<TaskItemOptions>({
         if (editor.isEditable && typeof getPos === 'function') {
           editor
             .chain()
-            .focus(undefined, { scrollIntoView: false })
+            ?.focus(undefined, { scrollIntoView: false })
             .command(({ tr }) => {
               const position = getPos()
 

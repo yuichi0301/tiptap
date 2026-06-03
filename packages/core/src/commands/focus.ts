@@ -63,7 +63,7 @@ export const focus: RawCommands['focus'] =
           view.focus()
 
           if (options?.scrollIntoView) {
-            editor.commands.scrollIntoView()
+            editor.commands?.scrollIntoView()
           }
         }
       })

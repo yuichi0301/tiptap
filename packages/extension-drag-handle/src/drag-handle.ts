@@ -163,19 +163,19 @@ export const DragHandle = Extension.create<DragHandleOptions>({
         () =>
         ({ editor }) => {
           this.options.locked = true
-          return editor.commands.setMeta('lockDragHandle', this.options.locked)
+          return editor.commands?.setMeta('lockDragHandle', this.options.locked) ?? false
         },
       unlockDragHandle:
         () =>
         ({ editor }) => {
           this.options.locked = false
-          return editor.commands.setMeta('lockDragHandle', this.options.locked)
+          return editor.commands?.setMeta('lockDragHandle', this.options.locked) ?? false
         },
       toggleDragHandle:
         () =>
         ({ editor }) => {
           this.options.locked = !this.options.locked
-          return editor.commands.setMeta('lockDragHandle', this.options.locked)
+          return editor.commands?.setMeta('lockDragHandle', this.options.locked) ?? false
         },
     }
   },

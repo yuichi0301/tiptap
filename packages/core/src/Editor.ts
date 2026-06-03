@@ -179,7 +179,7 @@ export class Editor extends EventEmitter<EditorEvents> {
       }
 
       if (this.options.autofocus !== false && this.options.autofocus !== null) {
-        this.commands.focus(this.options.autofocus)
+        this.commands?.focus(this.options.autofocus)
       }
       this.emit('create', { editor: this })
       this.isInitialized = true
@@ -231,21 +231,33 @@ export class Editor extends EventEmitter<EditorEvents> {
   /**
    * An object of all registered commands.
    */
-  public get commands(): SingleCommands {
+  public get commands(): SingleCommands | null {
+    if (this.destroyed || !this.commandManager) {
+      return null
+    }
+
     return this.commandManager.commands
   }
 
   /**
    * Create a command chain to call multiple commands at once.
    */
-  public chain(): ChainedCommands {
+  public chain(): ChainedCommands | null {
+    if (this.destroyed || !this.commandManager) {
+      return null
+    }
+
     return this.commandManager.chain()
   }
 
   /**
    * Check if a command or a command chain can be executed. Without executing it.
    */
-  public can(): CanCommands {
+  public can(): CanCommands | null {
+    if (this.destroyed || !this.commandManager) {
+      return null
+    }
+
     return this.commandManager.can()
   }
 
@@ -748,6 +760,10 @@ export class Editor extends EventEmitter<EditorEvents> {
    * Get the document as HTML.
    */
   public getHTML(): string {
+    if (this.destroyed || !this.schema) {
+      return ''
+    }
+
     return getHTMLFromFragment(this.state.doc.content, this.schema)
   }
 
@@ -758,6 +774,10 @@ export class Editor extends EventEmitter<EditorEvents> {
     blockSeparator?: string
     textSerializers?: Record<string, TextSerializer>
   }): string {
+    if (this.destroyed || !this.schema) {
+      return ''
+    }
+
     const { blockSeparator = '\n\n', textSerializers = {} } = options || {}
 
     return getText(this.state.doc, {
@@ -803,7 +823,7 @@ export class Editor extends EventEmitter<EditorEvents> {
    * Check if the editor is already destroyed.
    */
   public get isDestroyed(): boolean {
-    return this.editorView?.isDestroyed ?? true
+    return this.destroyed || (this.editorView?.isDestroyed ?? true)
   }
 
   public $node(selector: string, attributes?: { [key: string]: any }): NodePos | null {

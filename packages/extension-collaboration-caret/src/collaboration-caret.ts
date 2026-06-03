@@ -168,7 +168,7 @@ export const CollaborationCaret = Extension.create<
             '[tiptap warn]: DEPRECATED: The "user" command is deprecated. Please use "updateUser" instead. Read more: https://tiptap.dev/api/extensions/collaboration-caret',
           )
 
-          return editor.commands.updateUser(attributes)
+          return editor.commands?.updateUser(attributes) ?? false
         },
     }
   },

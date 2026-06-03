@@ -202,7 +202,7 @@ export const Details = Node.create<DetailsOptions>({
         toggleDetailsContent()
 
         if (!this.options.persist) {
-          editor.commands.focus(undefined, { scrollIntoView: false })
+          editor.commands?.focus(undefined, { scrollIntoView: false })
 
           return
         }
@@ -212,7 +212,7 @@ export const Details = Node.create<DetailsOptions>({
 
           editor
             .chain()
-            .command(({ tr }) => {
+            ?.command(({ tr }) => {
               const pos = getPos()
 
               if (typeof pos !== 'number') {
@@ -380,17 +380,19 @@ export const Details = Node.create<DetailsOptions>({
         // so we have to remove the text manually
         // see: https://discuss.prosemirror.net/t/safari-backspace-bug-with-details-tag/4223
         if ($anchor.parentOffset !== 0) {
-          return this.editor.commands.command(({ tr }) => {
-            const from = $anchor.pos - 1
-            const to = $anchor.pos
+          return (
+            this.editor.commands?.command(({ tr }) => {
+              const from = $anchor.pos - 1
+              const to = $anchor.pos
 
-            tr.delete(from, to)
+              tr.delete(from, to)
 
-            return true
-          })
+              return true
+            }) ?? false
+          )
         }
 
-        return this.editor.commands.unsetDetails()
+        return this.editor.commands?.unsetDetails() ?? false
       },
 
       // Creates a new node below it if it is closed.

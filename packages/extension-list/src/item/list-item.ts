@@ -193,9 +193,9 @@ export const ListItem = Node.create<ListItemOptions>({
 
   addKeyboardShortcuts() {
     return {
-      Enter: () => this.editor.commands.splitListItem(this.name),
-      Tab: () => this.editor.commands.sinkListItem(this.name),
-      'Shift-Tab': () => this.editor.commands.liftListItem(this.name),
+      Enter: () => this.editor.commands?.splitListItem(this.name) ?? false,
+      Tab: () => this.editor.commands?.sinkListItem(this.name) ?? false,
+      'Shift-Tab': () => this.editor.commands?.liftListItem(this.name) ?? false,
     }
   },
 })

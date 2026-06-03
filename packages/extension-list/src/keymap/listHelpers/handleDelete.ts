@@ -28,17 +28,19 @@ export const handleDelete = (editor: Editor, name: string) => {
 
   // check if the next node is a list with a deeper depth
   if (nextListIsDeeper(name, editor.state)) {
-    return editor
-      .chain()
-      .focus(editor.state.selection.from + 4)
-      .lift(name)
-      .joinBackward()
-      .run()
+    return (
+      editor
+        .chain()
+        ?.focus(editor.state.selection.from + 4)
+        .lift(name)
+        .joinBackward()
+        .run() ?? false
+    )
   }
 
   if (nextListIsHigher(name, editor.state)) {
-    return editor.chain().joinForward().joinBackward().run()
+    return editor.chain()?.joinForward().joinBackward().run() ?? false
   }
 
-  return editor.commands.joinItemForward()
+  return editor.commands?.joinItemForward() ?? false
 }

@@ -203,7 +203,7 @@ export const CodeBlock = Node.create<CodeBlockOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-Alt-c': () => this.editor.commands.toggleCodeBlock(),
+      'Mod-Alt-c': () => this.editor.commands?.toggleCodeBlock() ?? false,
 
       // remove code block when at start of document or code block is empty
       Backspace: () => {
@@ -215,7 +215,7 @@ export const CodeBlock = Node.create<CodeBlockOptions>({
         }
 
         if (isAtStart || !$anchor.parent.textContent.length) {
-          return this.editor.commands.clearNodes()
+          return this.editor.commands?.clearNodes() ?? false
         }
 
         return false
@@ -239,18 +239,20 @@ export const CodeBlock = Node.create<CodeBlockOptions>({
         const indent = ' '.repeat(tabSize)
 
         if (empty) {
-          return editor.commands.insertContent(indent)
+          return editor.commands?.insertContent(indent) ?? false
         }
 
-        return editor.commands.command(({ tr }) => {
-          const { from, to } = selection
-          const text = state.doc.textBetween(from, to, '\n', '\n')
-          const lines = text.split('\n')
-          const indentedText = lines.map(line => indent + line).join('\n')
+        return (
+          editor.commands?.command(({ tr }) => {
+            const { from, to } = selection
+            const text = state.doc.textBetween(from, to, '\n', '\n')
+            const lines = text.split('\n')
+            const indentedText = lines.map(line => indent + line).join('\n')
 
-          tr.replaceWith(from, to, state.schema.text(indentedText))
-          return true
-        })
+            tr.replaceWith(from, to, state.schema.text(indentedText))
+            return true
+          }) ?? false
+        )
       },
 
       // handle shift+tab reverse indentation
@@ -269,65 +271,69 @@ export const CodeBlock = Node.create<CodeBlockOptions>({
         }
 
         if (empty) {
-          return editor.commands.command(({ tr }) => {
-            const { pos } = $from
-            const codeBlockStart = $from.start()
-            const codeBlockEnd = $from.end()
+          return (
+            editor.commands?.command(({ tr }) => {
+              const { pos } = $from
+              const codeBlockStart = $from.start()
+              const codeBlockEnd = $from.end()
 
-            const allText = state.doc.textBetween(codeBlockStart, codeBlockEnd, '\n', '\n')
-            const lines = allText.split('\n')
+              const allText = state.doc.textBetween(codeBlockStart, codeBlockEnd, '\n', '\n')
+              const lines = allText.split('\n')
 
-            let currentLineIndex = 0
-            let charCount = 0
-            const relativeCursorPos = pos - codeBlockStart
+              let currentLineIndex = 0
+              let charCount = 0
+              const relativeCursorPos = pos - codeBlockStart
 
-            for (let i = 0; i < lines.length; i += 1) {
-              if (charCount + lines[i].length >= relativeCursorPos) {
-                currentLineIndex = i
-                break
+              for (let i = 0; i < lines.length; i += 1) {
+                if (charCount + lines[i].length >= relativeCursorPos) {
+                  currentLineIndex = i
+                  break
+                }
+                charCount += lines[i].length + 1
               }
-              charCount += lines[i].length + 1
-            }
 
-            const currentLine = lines[currentLineIndex]
-            const leadingSpaces = currentLine.match(/^ */)?.[0] || ''
-            const spacesToRemove = Math.min(leadingSpaces.length, tabSize)
+              const currentLine = lines[currentLineIndex]
+              const leadingSpaces = currentLine.match(/^ */)?.[0] || ''
+              const spacesToRemove = Math.min(leadingSpaces.length, tabSize)
 
-            if (spacesToRemove === 0) {
+              if (spacesToRemove === 0) {
+                return true
+              }
+
+              let lineStartPos = codeBlockStart
+              for (let i = 0; i < currentLineIndex; i += 1) {
+                lineStartPos += lines[i].length + 1
+              }
+
+              tr.delete(lineStartPos, lineStartPos + spacesToRemove)
+
+              const cursorPosInLine = pos - lineStartPos
+              if (cursorPosInLine <= spacesToRemove) {
+                tr.setSelection(TextSelection.create(tr.doc, lineStartPos))
+              }
+
               return true
-            }
-
-            let lineStartPos = codeBlockStart
-            for (let i = 0; i < currentLineIndex; i += 1) {
-              lineStartPos += lines[i].length + 1
-            }
-
-            tr.delete(lineStartPos, lineStartPos + spacesToRemove)
-
-            const cursorPosInLine = pos - lineStartPos
-            if (cursorPosInLine <= spacesToRemove) {
-              tr.setSelection(TextSelection.create(tr.doc, lineStartPos))
-            }
-
-            return true
-          })
+            }) ?? false
+          )
         }
 
-        return editor.commands.command(({ tr }) => {
-          const { from, to } = selection
-          const text = state.doc.textBetween(from, to, '\n', '\n')
-          const lines = text.split('\n')
-          const reverseIndentText = lines
-            .map(line => {
-              const leadingSpaces = line.match(/^ */)?.[0] || ''
-              const spacesToRemove = Math.min(leadingSpaces.length, tabSize)
-              return line.slice(spacesToRemove)
-            })
-            .join('\n')
+        return (
+          editor.commands?.command(({ tr }) => {
+            const { from, to } = selection
+            const text = state.doc.textBetween(from, to, '\n', '\n')
+            const lines = text.split('\n')
+            const reverseIndentText = lines
+              .map(line => {
+                const leadingSpaces = line.match(/^ */)?.[0] || ''
+                const spacesToRemove = Math.min(leadingSpaces.length, tabSize)
+                return line.slice(spacesToRemove)
+              })
+              .join('\n')
 
-          tr.replaceWith(from, to, state.schema.text(reverseIndentText))
-          return true
-        })
+            tr.replaceWith(from, to, state.schema.text(reverseIndentText))
+            return true
+          }) ?? false
+        )
       },
 
       // exit node on triple enter
@@ -351,15 +357,17 @@ export const CodeBlock = Node.create<CodeBlockOptions>({
           return false
         }
 
-        return editor
-          .chain()
-          .command(({ tr }) => {
-            tr.delete($from.pos - 2, $from.pos)
+        return (
+          editor
+            .chain()
+            ?.command(({ tr }) => {
+              tr.delete($from.pos - 2, $from.pos)
 
-            return true
-          })
-          .exitCode()
-          .run()
+              return true
+            })
+            .exitCode()
+            .run() ?? false
+        )
       },
 
       // exit node on arrow down
@@ -391,13 +399,15 @@ export const CodeBlock = Node.create<CodeBlockOptions>({
         const nodeAfter = doc.nodeAt(after)
 
         if (nodeAfter) {
-          return editor.commands.command(({ tr }) => {
-            tr.setSelection(Selection.near(doc.resolve(after)))
-            return true
-          })
+          return (
+            editor.commands?.command(({ tr }) => {
+              tr.setSelection(Selection.near(doc.resolve(after)))
+              return true
+            }) ?? false
+          )
         }
 
-        return editor.commands.exitCode()
+        return editor.commands?.exitCode() ?? false
       },
     }
   },

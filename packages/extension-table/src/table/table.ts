@@ -488,17 +488,17 @@ export const Table = Node.create<TableOptions>({
   addKeyboardShortcuts() {
     return {
       Tab: () => {
-        if (this.editor.commands.goToNextCell()) {
+        if (this.editor.commands?.goToNextCell()) {
           return true
         }
 
-        if (!this.editor.can().addRowAfter()) {
+        if (!this.editor.can()?.addRowAfter()) {
           return false
         }
 
-        return this.editor.chain().addRowAfter().goToNextCell().run()
+        return this.editor.chain()?.addRowAfter().goToNextCell().run() ?? false
       },
-      'Shift-Tab': () => this.editor.commands.goToPreviousCell(),
+      'Shift-Tab': () => this.editor.commands?.goToPreviousCell() ?? false,
       Backspace: deleteTableWhenAllCellsSelected,
       'Mod-Backspace': deleteTableWhenAllCellsSelected,
       Delete: deleteTableWhenAllCellsSelected,

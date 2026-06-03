@@ -300,7 +300,7 @@ export function pasteRulesPlugin(props: { editor: Editor; rules: PasteRule[] }):
                   const selection = dragFromOtherEditor.state.selection
 
                   if (selection) {
-                    dragFromOtherEditor.commands.deleteRange({
+                    dragFromOtherEditor.commands?.deleteRange({
                       from: selection.from,
                       to: selection.to,
                     })

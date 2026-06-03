@@ -181,7 +181,7 @@ export const TaskList = Node.create<TaskListOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-Shift-9': () => this.editor.commands.toggleTaskList(),
+      'Mod-Shift-9': () => this.editor.commands?.toggleTaskList() ?? false,
     }
   },
 })

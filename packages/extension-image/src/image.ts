@@ -190,7 +190,7 @@ export const Image = Node.create<ImageOptions>({
 
           this.editor
             .chain()
-            .setNodeSelection(pos)
+            ?.setNodeSelection(pos)
             .updateAttributes(this.name, {
               width,
               height,
